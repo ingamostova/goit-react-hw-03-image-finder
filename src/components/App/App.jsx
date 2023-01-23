@@ -3,6 +3,7 @@ import { Searchbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { Button } from '../Button/Button';
 import { Loader } from '../Loader/Loader';
+import { Modal } from 'components/Modal/Modal';
 import { fetchImages } from 'api';
 import { Container } from './App.styled';
 
@@ -14,13 +15,9 @@ export class App extends Component {
     searchQuerry: null,
     isLoading: false,
     error: null,
+    largeImageURL: '',
+    showModal: false,
   };
-
-  // toggleModal = () => {
-  //   this.setState(state => ({
-  //     showModal: !state.showModal,
-  //   }));
-  // };
 
   loadMore = () => {
     this.setState(prevState => ({
@@ -65,9 +62,28 @@ export class App extends Component {
     this.setState({ searchQuerry, page: 1, pictures: [] });
   };
 
+  onToggleModal = () => {
+    this.setState({ showModal: !this.state.showModal });
+  };
+  onOpenModal = evt => {
+    const largeImageURL = evt.target.dataset.source;
+    // console.log(largeImageURL);
+    if (largeImageURL) {
+      this.setState({ largeImageURL: largeImageURL });
+      this.onToggleModal();
+    }
+  };
+
   render() {
-    const { isLoading, error, pictures, totalPictures } = this.state;
-    const { handleSubmit, loadMore } = this;
+    const {
+      isLoading,
+      error,
+      pictures,
+      totalPictures,
+      showModal,
+      largeImageURL,
+    } = this.state;
+    const { handleSubmit, loadMore, onOpenModal } = this;
     const difference = pictures.length < totalPictures;
 
     return (
@@ -75,12 +91,17 @@ export class App extends Component {
         <Searchbar onSubmit={handleSubmit} />
         {error && <p>{error}</p>}
         {/* {pictures.length > 0 && !isLoading && ( */}
-        <ImageGallery pictures={pictures} />
+        <ImageGallery onClick={onOpenModal} pictures={pictures} />
         {/* )} */}
         {pictures.length > 0 && !isLoading && difference && (
           <Button onClick={loadMore} />
         )}
         {isLoading && <Loader />}
+        {showModal && (
+          <Modal onToggleModal={this.onToggleModal}>
+            <img src={largeImageURL} alt="" />
+          </Modal>
+        )}
       </Container>
     );
   }

@@ -50,9 +50,7 @@ export class App extends Component {
           error: error.message,
         });
       } finally {
-        setTimeout(() => {
-          this.setState({ isLoading: false });
-        }, 1000);
+        this.setState({ isLoading: false });
       }
     }
   }

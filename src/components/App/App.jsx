@@ -27,14 +27,15 @@ export class App extends Component {
 
     if (prevImage !== nextImage || prevPage !== nextPage) {
       try {
+        if (nextImage.trim() === '') {
+          throw new Error('Please enter correct search query');
+        }
         this.setState({ isLoading: true, error: null });
         const data = await fetchImages(nextImage, nextPage);
         if (!data.hits.length) {
           throw new Error(
             'Sorry, there are no images matching your search query. Please try again.'
           );
-        } else if (nextImage.trim() === '') {
-          throw new Error('Please enter correct search query');
         }
         this.setState(prevState => ({
           pictures: [...prevState.pictures, ...data.hits],

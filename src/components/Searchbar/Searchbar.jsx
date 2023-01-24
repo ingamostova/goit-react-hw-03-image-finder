@@ -5,8 +5,8 @@ export const Searchbar = ({ onSubmit }) => {
   const handleSubmit = evt => {
     evt.preventDefault();
     const form = evt.currentTarget;
-    const querry = form.elements.querry.value.toLowerCase();
-    onSubmit(querry);
+    const query = form.elements.query.value.toLowerCase();
+    onSubmit(query);
     form.reset();
   };
 
@@ -19,7 +19,7 @@ export const Searchbar = ({ onSubmit }) => {
 
         <Field
           className="input"
-          name="querry"
+          name="query"
           type="text"
           autoComplete="off"
           autoFocus

@@ -18,4 +18,5 @@ ImageGallery.propTypes = {
       id: PropTypes.number.isRequired,
     })
   ),
+  onClick: PropTypes.func.isRequired,
 };

@@ -12,22 +12,16 @@ export class App extends Component {
     pictures: [],
     page: 1,
     totalPictures: 0,
-    searchQuerry: null,
+    searchQuery: null,
     isLoading: false,
     error: null,
-    largeImageURL: '',
+    largePicture: '',
     showModal: false,
   };
 
-  loadMore = () => {
-    this.setState(prevState => ({
-      page: (prevState.page += 1),
-    }));
-  };
-
   async componentDidUpdate(prevProps, prevState) {
-    const prevImage = prevState.searchQuerry;
-    const nextImage = this.state.searchQuerry;
+    const prevImage = prevState.searchQuery;
+    const nextImage = this.state.searchQuery;
     const prevPage = prevState.page;
     const nextPage = this.state.page;
 
@@ -55,20 +49,26 @@ export class App extends Component {
     }
   }
 
-  handleSubmit = searchQuerry => {
-    console.log(searchQuerry);
-    this.setState({ searchQuerry, page: 1, pictures: [] });
+  handleSubmit = searchQuery => {
+    this.setState({ searchQuery, page: 1, pictures: [] });
   };
 
-  onToggleModal = () => {
+  loadMore = () => {
+    this.setState(prevState => ({
+      page: (prevState.page += 1),
+    }));
+  };
+
+  toggleModal = () => {
     this.setState({ showModal: !this.state.showModal });
   };
-  onOpenModal = evt => {
-    const largeImageURL = evt.target.dataset.source;
-    // console.log(largeImageURL);
-    if (largeImageURL) {
-      this.setState({ largeImageURL: largeImageURL });
-      this.onToggleModal();
+
+  openModal = evt => {
+    const largePicture = evt.target.dataset.source;
+    console.log(largePicture);
+    if (largePicture) {
+      this.setState({ largePicture });
+      this.toggleModal();
     }
   };
 
@@ -79,9 +79,9 @@ export class App extends Component {
       pictures,
       totalPictures,
       showModal,
-      largeImageURL,
+      largePicture,
     } = this.state;
-    const { handleSubmit, loadMore, onOpenModal } = this;
+    const { handleSubmit, loadMore, openModal, toggleModal } = this;
     const difference = pictures.length < totalPictures;
 
     return (
@@ -89,15 +89,15 @@ export class App extends Component {
         <Searchbar onSubmit={handleSubmit} />
         {error && <p>{error}</p>}
         {/* {pictures.length > 0 && !isLoading && ( */}
-        <ImageGallery onClick={onOpenModal} pictures={pictures} />
+        <ImageGallery onClick={openModal} pictures={pictures} />
         {/* )} */}
         {pictures.length > 0 && !isLoading && difference && (
           <Button onClick={loadMore} />
         )}
         {isLoading && <Loader />}
         {showModal && (
-          <Modal onToggleModal={this.onToggleModal}>
-            <img src={largeImageURL} alt="" />
+          <Modal onToggleModal={toggleModal}>
+            <img src={largePicture} alt="" />
           </Modal>
         )}
       </Container>

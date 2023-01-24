@@ -88,9 +88,7 @@ export class App extends Component {
       <Container>
         <Searchbar onSubmit={handleSubmit} />
         {error && <p>{error}</p>}
-        {/* {pictures.length > 0 && !isLoading && ( */}
         <ImageGallery onClick={openModal} pictures={pictures} />
-        {/* )} */}
         {pictures.length > 0 && !isLoading && difference && (
           <Button onClick={loadMore} />
         )}
